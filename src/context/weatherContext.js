@@ -4,10 +4,10 @@ import { createContext } from "react";
 export const WeatherContext = createContext({
     city:"",
     cityArray: [],
-    addCity:(city)=>{
-    },
+    addCity:(city)=>{},
     removeCity:(city)=>{},
     updateCity:(city)=>{},
+    clearAllCity:()=>{}
 })
 
 export const useWeather = ()=>{

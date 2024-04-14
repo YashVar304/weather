@@ -5,6 +5,7 @@ import humidityPic from '../assets/humidity.png'
 import wind from '../assets/wind.png'
 import useWeatherInfo from '../custom/useWeatherInfo'
 import Card from './Card'
+import Form from './Form'
 import { WeatherContextProvider } from '../context/weatherContext'
 function Weather() {
    const [city,setCity] = useState('')
@@ -34,15 +35,15 @@ function Weather() {
    const removeCity = (city)=>{
     setCityArray((prev)=>prev.filter((prev)=>prev!=city))
    }
+   const clearAllCity=()=>{
+    setCityArray([])
+   }
    
 
   return (
-    <WeatherContextProvider value={{city,cityArray,addCity,removeCity,updateCity}}>
+    <WeatherContextProvider value={{city,cityArray,addCity,removeCity,updateCity,clearAllCity}}>
       <div className='bg-gradient-to-br from-teal-400 to-purple-600 shadow-lg sm:rounded-2xl py-2 h-full w-full lg:w-1/3 sm:w-1/2 '>
-    <div className='flex  h-[5%]  justify-center mx-8 my-4  '>
-      <input type="text" className='w-full  rounded-l-lg px-3 py-1.5 outline-none bg-[#f5fefd] ' placeholder='Search your city' onChange={(e) => { setSearchedCity(e.target.value) }} value={searchedCity} />
-      <button className='text-white bg-green-400 rounded-r-lg px-3 py-1.5 shrink-0 rounded-l-none outline-none ' onClick={()=>updateCity(searchedCity)}><img src={searchIcon} alt="" className='h-full w-full' /></button>
-    </div>
+       <Form city = {searchedCity} setCity={setSearchedCity} func={updateCity} placeholder="Search city"/>
     {error ?
     (
       <div className='h-[40%] shadow-lg mx-8 my-2 py-2 rounded-lg bg-[#383e3e]/30 flex justify-center items-center text-white'>{error}</div>):(
@@ -62,28 +63,36 @@ function Weather() {
     </div>
     <div className='flex justify-evenly h-[20%] bg-[#383e3e]/30 rounded-lg mx-8 py-2 '>
       <div className='flex flex-col items-center justify-center'>
+      <p className='text-white font-bold mb-3 text-[0.85rem] '>
+          Humidity
+        </p>
         <img src={humidityPic} alt="" className='h-10 ' />
         <p className='text-white font-bold mt-3 text-[0.85rem] '>
-          {data && data.main && data.main.humidity}% humidity
+          {data && data.main && data.main.humidity}% 
         </p>
       </div>
       <div className='flex flex-col items-center justify-center'>
+      <p className='text-white font-bold mb-3 text-[0.85rem] '>
+          Wind
+        </p>
         <img src={wind} alt="" className='h-10 w-12  ' />
         <p className='text-white font-bold mt-3 text-[0.85rem] lg:mt-2 lg:text-xs lg:font-medium'>{data && data.wind && data.wind.speed} km/hr</p>
       </div>
     </div>
     </>)}
-    <div className='flex  h-[5%]  justify-center mx-8 my-4  '>
-    <input type="text" className='w-full  rounded-l-lg px-3 py-1.5 outline-none bg-[#f5fefd] ' placeholder='Search your city' onChange={(e) => { setCityAdded(e.target.value) }} value={cityAdded} />
-      <button className='text-white bg-green-400 rounded-r-lg px-3 py-1.5 shrink-0 rounded-l-none outline-none ' onClick={()=>addCity(cityAdded)}><img src={searchIcon} alt="" className='h-full w-full' /></button>
-    </div>
-    <div className='flex  flex-wrap gap-2  h-[32%] max-h-60 w-full  overflow-y-auto'>
+   <Form city={cityAdded} setCity={setCityAdded} func={addCity} placeholder="Add city"/>
+    <div className='flex  flex-wrap gap-2  h-[32%] max-h-60 w-full  overflow-y-auto lg:h-[27%]'>
       {cityArray.map((each)=>(
         (<div key={nanoid()} className='mx-8 w-full'>
           <Card name={each}/>
         </div>)
       ))}
     </div>
+    <div className='flex justify-center items-center'>
+      <button className='p-2 bg-red-600 rounded-md mt-1 text-white' onClick={clearAllCity}>
+        Clear All
+      </button>
+      </div>
   </div></WeatherContextProvider>
     
   
