@@ -10,7 +10,7 @@ function Card({ name }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      try {if(name){
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=fcef69b40c017531b6a6e6bf9f0c1d84`);
         if (!response.ok) {
           throw new Error('Failed to fetch');
@@ -18,7 +18,7 @@ function Card({ name }) {
         const jsonData = await response.json();
         setData(jsonData);
         setError(null);
-      } catch (error) {
+      }else {setError("error"); removeCity(name)}} catch (error) {
         console.error('Error fetching data:', error);
         setError('Error fetching data');
         setData(null);
@@ -30,9 +30,7 @@ function Card({ name }) {
 
   return (
     <>
-      {error ? (
-        <div></div>
-      ) : (
+      {error ? removeCity(name) : (
         <div className='p-1 bg-[#383e3e]/30 rounded-xl'>
           <div className='flex justify-evenly items-center'>
             {data && data.weather && (
